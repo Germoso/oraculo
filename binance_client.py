@@ -13,6 +13,22 @@ if(not binance_api_key or not binance_api_secret):
 
 client = Client(binance_api_key, binance_api_secret)
 
+def get_symbol_filters(symbol):
+    symbol_info = get_symbol_info(symbol)
+    if symbol_info:
+        # Extraer el filtro de precios y de cantidades
+        price_filter = next(f for f in symbol_info['filters'] if f['filterType'] == 'PRICE_FILTER')
+        lot_size_filter = next(f for f in symbol_info['filters'] if f['filterType'] == 'LOT_SIZE')
+        return float(price_filter['tickSize']), int(lot_size_filter['stepSize'].find('1') - 2)
+    else:
+        return None, None
+
+def round_price_to_tick_size(price, tick_size):
+    return round(price / tick_size) * tick_size
+
+def round_quantity_to_precision(quantity, precision):
+    return round(quantity, precision)
+
 def get_symbol_precision(symbol):
     symbol_info = get_symbol_info(symbol)
     if symbol_info:
@@ -45,39 +61,46 @@ def get_max_leverage(symbol):
         return None
 
 def place_futures_order(symbol, entry_price, quantity_dollars, tp_price, sl_price, leverage, side, margin_type="ISOLATED"):
-    quantity = round(quantity_dollars / entry_price, 1)
+    # Obtener el tick size y la precisión de cantidad para el símbolo
+    tick_size, quantity_precision = get_symbol_filters(symbol)
+    if tick_size is None or quantity_precision is None:
+        print(f"No se pudo obtener el tick size o la precisión para {symbol}.")
+        return
+
+    # Ajustar precios y cantidad a los valores correctos
+    entry_price = round_price_to_tick_size(entry_price, tick_size)
+    sl_price = round_price_to_tick_size(sl_price, tick_size)
+    tp_price = round_price_to_tick_size(tp_price, tick_size)
+    
+    quantity = round_quantity_to_precision(quantity_dollars / entry_price, quantity_precision)
+    
     print(f"Placing order for {quantity} {symbol} at {entry_price} with TP at {tp_price}, SL at {sl_price}, and leverage {leverage} for {side} operation")
     
     try:
-        # Establece el apalancamiento para el símbolo
         client.futures_change_leverage(symbol=symbol, leverage=leverage)
 
-        # Cambia el tipo de margen a aislado o cruzado
         try:
             client.futures_change_margin_type(symbol=symbol, marginType=margin_type.upper())
             print(f"Tipo de margen para {symbol} establecido a {margin_type.upper()}")
         except BinanceAPIException as e:
-            if e.code == -4046:  # No need to change margin type
+            if e.code == -4046:
                 print(f"El tipo de margen ya está configurado como {margin_type.upper()}.")
             else:
                 raise e
 
-        # Coloca la orden en el mercado de futuros
         order = client.futures_create_order(
             symbol=symbol,
-            side="SELL" if side.upper() == "SHORT" else "BUY",  # "BUY" para LONG, "SELL" para SHORT
+            side="SELL" if side.upper() == "SHORT" else "BUY",
             type='LIMIT',
-            timeInForce='GTC',  # Good-Til-Canceled
+            timeInForce='GTC',
             quantity=quantity,
             price=entry_price
         )
         
         print(f"Orden colocada: {order}")
 
-        # Obtén el precio de mercado actual
         market_price = float(client.futures_mark_price(symbol=symbol)["markPrice"])
 
-        # Validar los precios del TP y SL
         if side.upper() == "LONG":
             if tp_price <= market_price:
                 raise ValueError("El precio de Take Profit para una posición LONG debe ser mayor que el precio de mercado actual.")
@@ -89,23 +112,21 @@ def place_futures_order(symbol, entry_price, quantity_dollars, tp_price, sl_pric
             if sl_price <= market_price:
                 raise ValueError("El precio de Stop Loss para una posición SHORT debe ser mayor que el precio de mercado actual.")
 
-        # Coloca la orden de Stop Loss
         sl_order = client.futures_create_order(
             symbol=symbol,
-            side="BUY" if side.upper() == "SHORT" else "SELL",  # El SL es una operación opuesta
+            side="BUY" if side.upper() == "SHORT" else "SELL",
             type='STOP_MARKET',
-            stopPrice=sl_price,  # Precio de activación del SL
+            stopPrice=sl_price,
             quantity=quantity,
             timeInForce='GTC'
         )
         print(f"Orden de Stop Loss colocada: {sl_order}")
 
-        # Coloca la orden de Take Profit
         tp_order = client.futures_create_order(
             symbol=symbol,
-            side="BUY" if side.upper() == "SHORT" else "SELL",  # El TP es una operación opuesta
+            side="BUY" if side.upper() == "SHORT" else "SELL",
             type='LIMIT',
-            price=tp_price,  # Precio objetivo del TP
+            price=tp_price,
             quantity=quantity,
             timeInForce='GTC'
         )

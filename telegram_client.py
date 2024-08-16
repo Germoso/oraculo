@@ -61,7 +61,7 @@ async def my_event_handler(event):
 
             ########################
 
-            await client.send_message('me', f'trade_type: {trade_type}, ticker: {ticker}, shock: {shock}, dist: {dist}%')
+            await client.send_message('me', f'Entry price: {shock}\nQuantity: {quantity}\nLeverage: {leverage}\nStop loss price: {stop_loss_price}\nTake profit price: {tp_price}\nType: {type}\nQuantity precision: {quantity_precision}\nPrice precision: {price_precision}\nMax leverage: {max_leverage}')
 
 
 # Inicia la sesión de Telegram

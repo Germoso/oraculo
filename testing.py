@@ -3,20 +3,20 @@ from binance_client import  place_futures_order, get_symbol_precision, get_max_l
 from calculator import calculate_trade
 
 message1 = """
-📕SHORT: INJUSDT📕
+📗LONG: TONUSDT📗
 
-SHOCK: $19.02
-DIST: 0.02%
-TARGET: $17.52
+SHOCK: 6.4058
+DIST: 0.1%
+TARGET: $6.8924
 
 SHOCKS
-ST1: 19.02
-ST2: 19.886 4.6%
-ST3: 21.386 7.5%
+LG1: 6.4058
+LG2: 6.1721 3.6%
+LG3: 5.6855 7.9%
 
 ALL TIME HIGH
-PRICE: $53.13
-DIST: 179.18%
+PRICE: $8.2924
+DIST: 29.36%
 """
 
 type, ticker = extract_type_and_ticker(message1)
