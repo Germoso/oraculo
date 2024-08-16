@@ -8,11 +8,10 @@ load_dotenv()
 binance_api_key = os.getenv('B_API_KEY')
 binance_api_secret = os.getenv('B_API_SECRET')
 
-if(not binance_api_key or not binance_api_secret):
-    raise ValueError("Please set your API key and secret in the .env file") 
+if not binance_api_key or not binance_api_secret:
+    raise ValueError("Please set your API key and secret in the .env file")
 
 client = Client(binance_api_key, binance_api_secret)
-
 
 def round_price_to_tick_size(price, tick_size):
     return round(price / tick_size) * tick_size
@@ -26,7 +25,7 @@ def get_symbol_precision(symbol):
     if symbol_info:
         # Obtén la precisión de cantidad y precio
         quantity_precision = symbol_info['baseAssetPrecision']
-        price_precision = symbol_info['pricePrecision']
+        price_precision = symbol_info['quantityPrecision']
         return quantity_precision, price_precision
     else:
         return None, None
@@ -52,7 +51,7 @@ def get_max_leverage(symbol):
         print(f'Error al obtener el apalancamiento máximo: {e}')
         return None
 
-def place_futures_order(symbol, entry_price, quantity_dollars, leverage, side, margin_type="ISOLATED"):
+def place_futures_order(symbol, entry_price, quantity_dollars, leverage, side, margin_type="CROSSED"):
     # Obtener el tick size y la precisión de cantidad para el símbolo
     tick_size, quantity_precision = get_symbol_precision(symbol)
     if tick_size is None or quantity_precision is None:
@@ -78,16 +77,16 @@ def place_futures_order(symbol, entry_price, quantity_dollars, leverage, side, m
 
         print(f"Creando orden de {side} para {quantity} {symbol} a {entry_price}")
 
-        order = client.futures_create_order(
-            symbol=symbol,
-            side="SELL" if side.upper() == "SHORT" else "BUY",
-            type='LIMIT',
-            timeInForce='GTC',
-            quantity=quantity,
-            price=entry_price
-        )
+        # order = client.futures_create_order(
+        #     symbol=symbol,
+        #     side="SELL" if side.upper() == "SHORT" else "BUY",
+        #     type='LIMIT',
+        #     timeInForce='GTC',
+        #     quantity=quantity,
+        #     price=entry_price
+        # )
         
-        print(f"Orden colocada: {order}")
+        # print(f"Orden colocada: {order}")
 
     except BinanceAPIException as e:
         print(f"Error en la API de Binance: {e}")
