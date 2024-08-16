@@ -3,20 +3,20 @@ from binance_client import  place_futures_order, get_symbol_precision, get_max_l
 from calculator import calculate_trade
 
 message1 = """
-📗LONG: TONUSDT📗
+📗LONG: ORDIUSDT📗
 
-SHOCK: 6.4058
-DIST: 0.1%
-TARGET: $6.8924
+SHOCK: 26.947
+DIST: 0.04%
+TARGET: $29.733
 
 SHOCKS
-LG1: 6.4058
-LG2: 6.1721 3.6%
-LG3: 5.6855 7.9%
+LG1: 26.947
+LG2: 25.76 4.4%
+LG3: 22.974 10.8%
 
 ALL TIME HIGH
-PRICE: $8.2924
-DIST: 29.36%
+PRICE: $96.953
+DIST: 258.12%
 """
 
 type, ticker = extract_type_and_ticker(message1)
@@ -41,7 +41,7 @@ print("Max leverage:", max_leverage)
 print("#######################")
 print("")
 
-# place_futures_order(symbol=ticker, entry_price=shock, quantity_dollars=quantity, tp_price=tp_price, sl_price=stop_loss_price, leverage=50, side=type)
+place_futures_order(symbol=ticker, entry_price=shock, quantity_dollars=quantity, tp_price=tp_price, sl_price=stop_loss_price, leverage=leverage, side=type)
 
 
 

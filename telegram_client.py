@@ -57,11 +57,11 @@ async def my_event_handler(event):
             print("#######################")
             print("")
 
-            place_futures_order(symbol=ticker, entry_price=shock, quantity_dollars=quantity, tp_price=tp_price, sl_price=stop_loss_price, leverage=50, side=type)
+            place_futures_order(symbol=ticker, entry_price=shock, quantity_dollars=quantity, tp_price=tp_price, sl_price=stop_loss_price, leverage=leverage, side=type)
 
             ########################
 
-            await client.send_message('me', f'Entry price: {shock}\nQuantity: {quantity}\nLeverage: {leverage}\nStop loss price: {stop_loss_price}\nTake profit price: {tp_price}\nType: {type}\nQuantity precision: {quantity_precision}\nPrice precision: {price_precision}\nMax leverage: {max_leverage}')
+            await client.send_message('me', f'Ticker: ${ticker} \n Entry price: {shock}\nQuantity: {quantity}\nLeverage: {leverage}\nStop loss price: {stop_loss_price}\nTake profit price: {tp_price}\nType: {type}\nQuantity precision: {quantity_precision}\nPrice precision: {price_precision}\nMax leverage: {max_leverage}')
 
 
 # Inicia la sesión de Telegram
