@@ -1,3 +1,5 @@
 telethon
 python-dotenv
 binance
+requests
+binance-connector
