@@ -3,3 +3,4 @@ python-dotenv
 binance
 requests
 binance-connector
+python-binance
