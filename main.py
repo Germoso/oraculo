@@ -41,7 +41,7 @@ async def my_event_handler(event):
             max_leverage = get_max_leverage(ticker)
 
 
-            quantity, leverage, stop_loss_price, tp_price = calculate_trade(trade_size=5, stop_loss_percentage=2, entry_price=shock, risk_reward_ratio=1, side=type, price_precision=price_precision, quantity_precision=quantity_precision, max_leverage=max_leverage)
+            quantity, leverage, stop_loss_price, tp_price = calculate_trade(trade_size=1, stop_loss_percentage=2, entry_price=shock, risk_reward_ratio=1, side=type, price_precision=price_precision, quantity_precision=quantity_precision, max_leverage=max_leverage)
 
             print("")
             print("#######################")
@@ -57,7 +57,7 @@ async def my_event_handler(event):
             print("#######################")
             print("")
 
-            place_futures_order(symbol=ticker, entry_price=shock, quantity_dollars=quantity, tp_price=tp_price, sl_price=stop_loss_price, leverage=leverage, side=type)
+            place_futures_order(entry_price=shock, quantity_dollars=quantity, leverage=leverage, side=type, symbol=ticker)
 
             ########################
 
@@ -69,7 +69,6 @@ async def main():
     await client.start(phone_number)
     print("Cliente iniciado.")
     await client.send_message('me', f'Bot en marcha')
-
     await client.run_until_disconnected()
 
 with client:

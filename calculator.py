@@ -14,6 +14,8 @@ def calculate_trade(trade_size, stop_loss_percentage, entry_price, quantity_prec
     if leverage > max_leverage:
         leverage = max_leverage
 
+    leverage = int(leverage)
+
     # Calcula el precio del stop loss y take profit considerando la precisión
     if side == "LONG":
         stop_loss_price = round_down(entry_price * (1 - stop_loss_percentage / 100), price_precision)

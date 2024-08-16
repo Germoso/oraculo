@@ -1,0 +1,1 @@
+si el quantity presicion es 0 ponserlo 1

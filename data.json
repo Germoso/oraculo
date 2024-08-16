@@ -1,0 +1,63 @@
+{
+  "symbol": "FTMUSDT",
+  "pair": "FTMUSDT",
+  "contractType": "PERPETUAL",
+  "deliveryDate": 4133404800000,
+  "onboardDate": 1569398400000,
+  "status": "TRADING",
+  "maintMarginPercent": "2.5000",
+  "requiredMarginPercent": "5.0000",
+  "baseAsset": "FTM",
+  "quoteAsset": "USDT",
+  "marginAsset": "USDT",
+  "pricePrecision": 6,
+  "quantityPrecision": 0,
+  "baseAssetPrecision": 8,
+  "quotePrecision": 8,
+  "underlyingType": "COIN",
+  "underlyingSubType": ["Layer-1"],
+  "settlePlan": 0,
+  "triggerProtect": "0.1000",
+  "liquidationFee": "0.010000",
+  "marketTakeBound": "0.10",
+  "maxMoveOrderLimit": 10000,
+  "filters": [
+    {
+      "minPrice": "0.007700",
+      "maxPrice": "41",
+      "filterType": "PRICE_FILTER",
+      "tickSize": "0.000100"
+    },
+    {
+      "stepSize": "1",
+      "minQty": "1",
+      "filterType": "LOT_SIZE",
+      "maxQty": "10000000"
+    },
+    {
+      "maxQty": "250000",
+      "stepSize": "1",
+      "filterType": "MARKET_LOT_SIZE",
+      "minQty": "1"
+    },
+    { "filterType": "MAX_NUM_ORDERS", "limit": 200 },
+    { "filterType": "MAX_NUM_ALGO_ORDERS", "limit": 10 },
+    { "notional": "5", "filterType": "MIN_NOTIONAL" },
+    {
+      "filterType": "PERCENT_PRICE",
+      "multiplierDecimal": "4",
+      "multiplierUp": "1.1000",
+      "multiplierDown": "0.9000"
+    }
+  ],
+  "orderTypes": [
+    "LIMIT",
+    "MARKET",
+    "STOP",
+    "STOP_MARKET",
+    "TAKE_PROFIT",
+    "TAKE_PROFIT_MARKET",
+    "TRAILING_STOP_MARKET"
+  ],
+  "timeInForce": ["GTC", "IOC", "FOK", "GTX", "GTD"]
+}
