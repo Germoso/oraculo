@@ -1,0 +1,8 @@
+.env
+session_name.session
+__pycache__/binance_client.cpython-311.pyc
+__pycache__/binance.cpython-311.pyc
+__pycache__/calculator.cpython-311.pyc
+__pycache__/extractors.cpython-311.pyc
+backtesting/scrapping.session
+session_name.session-journal
