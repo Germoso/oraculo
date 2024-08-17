@@ -77,16 +77,16 @@ def place_futures_order(symbol, entry_price, quantity_dollars, leverage, side, m
 
         print(f"Creando orden de {side} para {quantity} {symbol} a {entry_price}")
 
-        # order = client.futures_create_order(
-        #     symbol=symbol,
-        #     side="SELL" if side.upper() == "SHORT" else "BUY",
-        #     type='LIMIT',
-        #     timeInForce='GTC',
-        #     quantity=quantity,
-        #     price=entry_price
-        # )
+        order = client.futures_create_order(
+            symbol=symbol,
+            side="SELL" if side.upper() == "SHORT" else "BUY",
+            type='LIMIT',
+            timeInForce='GTC',
+            quantity=quantity,
+            price=entry_price
+        )
         
-        # print(f"Orden colocada: {order}")
+        print(f"Orden colocada: {order}")
 
     except BinanceAPIException as e:
         print(f"Error en la API de Binance: {e}")

@@ -41,7 +41,7 @@ async def my_event_handler(event):
             max_leverage = get_max_leverage(ticker)
 
 
-            quantity, leverage, stop_loss_price, tp_price = calculate_trade(trade_size=1, stop_loss_percentage=2, entry_price=shock, risk_reward_ratio=1, side=type, price_precision=price_precision, quantity_precision=quantity_precision, max_leverage=max_leverage)
+            quantity, leverage, stop_loss_price, tp_price = calculate_trade(trade_size=2, stop_loss_percentage=2, entry_price=shock, risk_reward_ratio=1, side=type, price_precision=price_precision, quantity_precision=quantity_precision, max_leverage=max_leverage)
 
             print("")
             print("#######################")

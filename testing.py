@@ -1,22 +1,22 @@
 from extractors import extract_type_and_ticker, extract_shock
-from binance_client import   get_symbol_precision, get_max_leverage
+from binance_client import   get_symbol_precision, get_max_leverage, place_futures_order
 from calculator import calculate_trade
 
 message1 = """
-📗LONG: FTMUSDT📗
+📕SHORT: BTCUSDT📕
 
-SHOCK: 0.3616
-DIST: 0.14%
-TARGET: $0.412
+SHOCK: $59648.9
+DIST: 0.07%
+TARGET: $55797.9
 
 SHOCKS
-LG1: 0.3616
-LG2: 0.3345 7.5%
-LG3: 0.2841 15.1%
+ST1: 59648.9
+ST2: 61660 3.4%
+ST3: 65511 6.2%
 
 ALL TIME HIGH
-PRICE: $3.4908
-DIST: 864.04%
+PRICE: $73881.4
+DIST: 23.95%
 """
 
 type, ticker = extract_type_and_ticker(message1)
@@ -25,7 +25,7 @@ quantity_precision, price_precision = get_symbol_precision(ticker)
 max_leverage = get_max_leverage(ticker)
 
 
-quantity, leverage, stop_loss_price, tp_price = calculate_trade(trade_size=5, stop_loss_percentage=2, entry_price=shock, risk_reward_ratio=1, side=type, price_precision=price_precision, quantity_precision=quantity_precision, max_leverage=max_leverage)
+quantity, leverage, stop_loss_price, tp_price = calculate_trade(trade_size=2, stop_loss_percentage=2, entry_price=shock, risk_reward_ratio=1, side=type, price_precision=price_precision, quantity_precision=quantity_precision, max_leverage=max_leverage)
 
 print("")
 print("#######################")
@@ -41,7 +41,7 @@ print("Max leverage:", max_leverage)
 print("#######################")
 print("")
 
-# place_futures_order(entry_price=shock, quantity_dollars=quantity, leverage=leverage, side=type, symbol=ticker)
+place_futures_order(entry_price=shock, quantity_dollars=quantity, leverage=leverage, side=type, symbol=ticker)
 
 
 
